@@ -1,0 +1,41 @@
+version: 1
+
+stacks:
+  - id: "ec2-dev"
+    name: "EC2 Dev Environment"
+    description: "Development EC2 instance"
+    project_root: "environments/dev"
+    runner_image: "public.ecr.aws/spacelift/runner-terragrunt:latest"
+    terraform_version: "1.5.0"
+    terragrunt_version: "0.50.0"
+    branch: "main"
+    autodeploy: true
+    labels:
+      - "environment:dev"
+      - "service:ec2"
+
+  - id: "ec2-stg"
+    name: "EC2 Staging Environment"
+    description: "Staging EC2 instance"
+    project_root: "environments/stg"
+    runner_image: "public.ecr.aws/spacelift/runner-terragrunt:latest"
+    terraform_version: "1.5.0"
+    terragrunt_version: "0.50.0"
+    branch: "main"
+    autodeploy: false
+    labels:
+      - "environment:stg"
+      - "service:ec2"
+
+  - id: "ec2-prod"
+    name: "EC2 Production Environment"
+    description: "Production EC2 instance"
+    project_root: "environments/prod"
+    runner_image: "public.ecr.aws/spacelift/runner-terragrunt:latest"
+    terraform_version: "1.5.0"
+    terragrunt_version: "0.50.0"
+    branch: "main"
+    autodeploy: false
+    labels:
+      - "environment:prod"
+      - "service:ec2"
