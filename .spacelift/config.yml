@@ -9,13 +9,8 @@ stack_sets:
     terragrunt_version: "0.50.0"
     branch: "main"
     administrative_stack: true
-    target_accounts:
-      - "123456789012"  # Dev account
-      - "123456789013"  # Staging account
-      - "123456789014"  # Prod account
-    target_regions:
-      - "us-east-1"
-      - "us-west-2"
+    target_accounts: ["123456789012", "123456789013", "123456789014"]
+    target_regions: ["us-east-1", "us-west-2"]
     labels:
       - "stackset:ec2"
       - "multi-account"
