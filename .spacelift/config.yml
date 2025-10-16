@@ -1,15 +1,37 @@
-version: 1
-
-stacks:
-  - id: "ec2-dev"
-    name: "EC2 Dev Environment"
-    description: "Development EC2 instance"
+# StackSet configuration for multi-account deployment
+stack_sets:
+  - id: "ec2-stackset"
+    name: "EC2 Multi-Account StackSet"
+    description: "Deploy EC2 across multiple accounts/regions"
     project_root: "environments/dev"
     runner_image: "public.ecr.aws/spacelift/runner-terragrunt:latest"
     terraform_version: "1.5.0"
     terragrunt_version: "0.50.0"
     branch: "main"
+    administrative_stack: true
+    target_accounts:
+      - "123456789012"  # Dev account
+      - "123456789013"  # Staging account
+      - "123456789014"  # Prod account
+    target_regions:
+      - "us-east-1"
+      - "us-west-2"
+    labels:
+      - "stackset:ec2"
+      - "multi-account"
+
+stacks:
+  - id: "ec2-dev"
+    name: "EC2 Dev Environment"
+    description: "Development EC2 instance"
+    project_root: "."
+    runner_image: "public.ecr.aws/spacelift/runner-terragrunt:latest"
+    terraform_version: "1.5.0"
+    terragrunt_version: "0.50.0"
+    branch: "main"
     autodeploy: true
+    before_init:
+      - "cd environments/dev"
     labels:
       - "environment:dev"
       - "service:ec2"
@@ -23,6 +45,8 @@ stacks:
     terragrunt_version: "0.50.0"
     branch: "main"
     autodeploy: false
+    depends_on:
+      - "ec2-dev"
     labels:
       - "environment:stg"
       - "service:ec2"
@@ -36,6 +60,8 @@ stacks:
     terragrunt_version: "0.50.0"
     branch: "main"
     autodeploy: false
+    depends_on:
+      - "ec2-stg"
     labels:
       - "environment:prod"
       - "service:ec2"
